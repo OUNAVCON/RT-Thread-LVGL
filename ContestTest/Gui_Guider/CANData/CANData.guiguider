@@ -1,0 +1,459 @@
+{
+	"projectName": "CANData",
+	"lvglVersion": "v8",
+	"Optimizations": "Balance",
+	"boardPlatformSettings": {
+		"resolution": {
+			"width": "480",
+			"height": "272"
+		},
+		"color_depth": 16,
+		"name": "MIMXRT1062xxxxA",
+		"panel_name": "RK043FN66HS",
+		"display_part_number": "RK043FN66HS-CTG",
+		"OS": "RTOS Independent, Baremetal",
+		"mcu": "MIMXRT1062DVL6A",
+		"mcuxpresso_config": {
+			"CMAKE_BUILD_TYPE": "flexspi_nor_sdram_release",
+			"ELF_BINARY_NAME": "littlevgl_guider.elf"
+		}
+	},
+	"demoTemplateSettings": {
+		"name": "ButtonCounter"
+	},
+	"BuildStatus": {
+		"supportPXP": true,
+		"enable_pxp": false
+	},
+	"version": "1.3.1-GA",
+	"lvConf": {
+		"LV_HOR_RES_MAX": "(480)",
+		"LV_VER_RES_MAX": "(272)",
+		"LV_COLOR_DEPTH": 16,
+		"LV_COLOR_16_SWAP": false,
+		"LV_MEM_CUSTOM": false,
+		"LV_MEM_SIZE": "320",
+		"LV_MEM_ADR": false,
+		"LV_MEM_AUTO_DEFRAG": true,
+		"LV_MEM_CUSTOM_INCLUDE": "FreeRTOS.h",
+		"LV_MEM_CUSTOM_ALLOC": "pvPortMalloc",
+		"LV_MEM_CUSTOM_FREE": "vPortFree",
+		"LV_USE_GPU": true,
+		"LV_USE_GPU_NXP_PXP": true,
+		"LV_USE_GPU_NXP_PXP_AUTO_INIT": true,
+		"LV_USE_GPU_NXP_VG_LITE": "~~",
+		"LV_ATTRIBUTE_MEM_ALIGN_SIZE": "64",
+		"LV_ATTRIBUTE_MEM_ALIGN": "__attribute__((aligned(LV_ATTRIBUTE_MEM_ALIGN_SIZE)))",
+		"LV_DISP_DEF_REFR_PERIOD": "20",
+		"LV_USE_PERF_MONITOR": false
+	},
+	"ImportFonts": {
+		"simsun": "font\\simsun.woff",
+		"montserratMedium": "font\\Montserrat-medium.ttf",
+		"arial": "font\\ARIAL.TTF",
+		"Abel_regular": "font\\abel-regular.ttf",
+		"Acme_Regular": "font\\Acme-Regular.ttf",
+		"Adventpro_regular": "font\\adventpro-regular.ttf",
+		"AguafinaScript_Regular": "font\\AguafinaScript-Regular.ttf",
+		"Alatsi_Regular": "font\\Alatsi-Regular.ttf",
+		"AlexBrush_Regular": "font\\AlexBrush-Regular.ttf",
+		"AmaticSC_Regular": "font\\AmaticSC-Regular.ttf",
+		"Amiko_Regular": "font\\Amiko-Regular.ttf",
+		"Antonio_Regular": "font\\Antonio-Regular.ttf",
+		"ArchitectsDaughter": "font\\ArchitectsDaughter.ttf"
+	},
+	"FrontJson": [
+		{
+			"name": "screen",
+			"id": "screen",
+			"width": 480,
+			"height": 272,
+			"list": [
+				{
+					"width": 200,
+					"height": 200,
+					"scales": [
+						{
+							"tick_cnt": 41,
+							"tick_width": 2,
+							"tick_len": 10,
+							"tick_color": "#000000",
+							"label_gap": 10,
+							"major_tick_enable": true,
+							"major_tick_nth": 8,
+							"major_tick_width": 5,
+							"major_tick_len": 15,
+							"major_tick_color": "#000000",
+							"range_enable": true,
+							"min_value": 0,
+							"max_value": 100,
+							"angle_range": 270,
+							"rotation": 135,
+							"needle_lines": [
+								{
+									"value": 3,
+									"needle_width": 2,
+									"needle_r_mod": -20,
+									"needle_color": "#000000"
+								}
+							],
+							"needle_imgs": [],
+							"arcs": [
+								{
+									"width": 2,
+									"start_value": 60,
+									"end_value": 100,
+									"r_mod": 2,
+									"color": "#ff0000"
+								}
+							],
+							"scale_lines": []
+						}
+					],
+					"part": "LV_PART_MAIN",
+					"state": "LV_STATE_DEFAULT",
+					"object": "main",
+					"disable": false,
+					"bg_color": "#ffffff",
+					"bg_grad_color": "#ffffff",
+					"bg_grad_dir": "LV_GRAD_DIR_VER",
+					"bg_opa": 255,
+					"font": 12,
+					"font_family": "simsun",
+					"text_color": "#000000",
+					"style": [
+						{
+							"part": "LV_PART_MAIN",
+							"state": "LV_STATE_DEFAULT",
+							"object": "main",
+							"disable": false,
+							"bg_color": "#ffffff",
+							"bg_grad_color": "#ffffff",
+							"bg_grad_dir": "LV_GRAD_DIR_VER",
+							"bg_opa": 255
+						},
+						{
+							"part": "LV_PART_MAIN",
+							"state": "LV_STATE_FOCUSED",
+							"object": "main",
+							"disable": true,
+							"bg_color": "#ffffff",
+							"bg_grad_color": "#ffffff",
+							"bg_grad_dir": "LV_GRAD_DIR_VER",
+							"bg_opa": 255
+						},
+						{
+							"part": "LV_PART_TICKS",
+							"state": "LV_STATE_DEFAULT",
+							"object": "main",
+							"disable": false,
+							"font": 12,
+							"font_family": "simsun",
+							"text_color": "#000000"
+						},
+						{
+							"part": "LV_PART_TICKS",
+							"state": "LV_STATE_FOCUSED",
+							"object": "main",
+							"disable": true,
+							"font": 12,
+							"font_family": "simsun",
+							"text_color": "#ff0000"
+						}
+					],
+					"name": "RPM",
+					"type": "meter",
+					"left": 12,
+					"top": 57,
+					"is_move_animation": false,
+					"desX": 0,
+					"desY": 0,
+					"path_type": "linear",
+					"duration": 100,
+					"id": "uaxlw8qh",
+					"default_style": false
+				},
+				{
+					"width": 100,
+					"height": 32,
+					"text": "RPM (x100)",
+					"text_align": "center",
+					"long_mode": "LV_LABEL_LONG_WRAP",
+					"part": "LV_PART_MAIN",
+					"state": "LV_STATE_DEFAULT",
+					"disable": false,
+					"bg_color": "#2195f6",
+					"bg_grad_color": "#2195f6",
+					"bg_grad_dir": "LV_GRAD_DIR_VER",
+					"bg_opa": 0,
+					"text_color": "#000000",
+					"font": 12,
+					"font_family": "arial",
+					"letter_space": 2,
+					"radius": 0,
+					"paddingTop": 0,
+					"paddingRight": 0,
+					"paddingBottom": 0,
+					"paddingLeft": 0,
+					"style": [
+						{
+							"part": "LV_PART_MAIN",
+							"state": "LV_STATE_DEFAULT",
+							"disable": false,
+							"radius": 0,
+							"text_color": "#000000",
+							"font": 12,
+							"font_family": "arial",
+							"letter_space": 2,
+							"bg_color": "#2195f6",
+							"bg_grad_color": "#2195f6",
+							"bg_opa": 0,
+							"bg_grad_dir": "LV_GRAD_DIR_VER",
+							"paddingTop": 0,
+							"paddingRight": 0,
+							"paddingBottom": 0,
+							"paddingLeft": 0
+						},
+						{
+							"part": "LV_PART_MAIN",
+							"state": "LV_STATE_DISABLED",
+							"disable": true,
+							"radius": 0,
+							"text_color": "#000000",
+							"font": 12,
+							"font_family": "simsun",
+							"letter_space": 2,
+							"bg_color": "#2195f6",
+							"bg_grad_color": "#2195f6",
+							"bg_opa": 0,
+							"bg_grad_dir": "LV_GRAD_DIR_VER",
+							"paddingTop": 0,
+							"paddingRight": 0,
+							"paddingBottom": 0,
+							"paddingLeft": 0
+						}
+					],
+					"name": "label_1",
+					"type": "label",
+					"left": 67,
+					"top": 214,
+					"is_move_animation": false,
+					"desX": 0,
+					"desY": 0,
+					"path_type": "linear",
+					"duration": 100,
+					"id": "3un6pc3w",
+					"default_style": false
+				}
+			],
+			"part": "LV_PART_MAIN",
+			"state": "LV_STATE_DEFAULT",
+			"disable": false,
+			"bg_color": "#ffffff",
+			"bg_opa": 0,
+			"style": [
+				{
+					"part": "LV_PART_MAIN",
+					"state": "LV_STATE_DEFAULT",
+					"disable": false,
+					"bg_color": "#ffffff",
+					"bg_opa": 0
+				}
+			]
+		}
+	],
+	"Application": {
+		"name": "testingJson",
+		"size": {
+			"width": "480",
+			"height": "272"
+		},
+		"version": "test_v1",
+		"default_scr": "screen",
+		"theme": "LV_THEME_MATERIAL_FLAG_LIGHT",
+		"screen": [
+			{
+				"name": "screen",
+				"type": "scr",
+				"style": [
+					{
+						"part": "LV_PART_MAIN",
+						"state": "LV_STATE_DEFAULT",
+						"disable": false,
+						"bg_color": "#ffffff",
+						"bg_opa": 0
+					}
+				],
+				"widgets": [
+					{
+						"name": "screen_RPM",
+						"type": "meter",
+						"pos": [
+							12,
+							57
+						],
+						"size": [
+							200,
+							200
+						],
+						"is_move_animation": false,
+						"path_type": "linear",
+						"move_animation": {
+							"des_pos": [
+								0,
+								0
+							],
+							"duration": 100
+						},
+						"default_style": false,
+						"scales": [
+							{
+								"tick_cnt": 41,
+								"tick_width": 2,
+								"tick_len": 10,
+								"tick_color": "#000000",
+								"label_gap": 10,
+								"major_tick_enable": true,
+								"major_tick_nth": 8,
+								"major_tick_width": 5,
+								"major_tick_len": 15,
+								"major_tick_color": "#000000",
+								"range_enable": true,
+								"min_value": 0,
+								"max_value": 100,
+								"angle_range": 270,
+								"rotation": 135,
+								"needle_lines": [
+									{
+										"value": 3,
+										"needle_width": 2,
+										"needle_r_mod": -20,
+										"needle_color": "#000000",
+										"needle_line_num": 0
+									}
+								],
+								"needle_imgs": [],
+								"arcs": [
+									{
+										"width": 2,
+										"start_value": 60,
+										"end_value": 100,
+										"r_mod": 2,
+										"color": "#ff0000",
+										"arc_num": 0
+									}
+								],
+								"scale_lines": [],
+								"scale_num": 1
+							}
+						],
+						"style": [
+							{
+								"part": "LV_PART_MAIN",
+								"state": "LV_STATE_DEFAULT",
+								"object": "main",
+								"disable": false,
+								"bg_color": "#ffffff",
+								"bg_grad_color": "#ffffff",
+								"bg_grad_dir": "LV_GRAD_DIR_VER",
+								"bg_opa": 255
+							},
+							{
+								"part": "LV_PART_MAIN",
+								"state": "LV_STATE_FOCUSED",
+								"object": "main",
+								"disable": true,
+								"bg_color": "#ffffff",
+								"bg_grad_color": "#ffffff",
+								"bg_grad_dir": "LV_GRAD_DIR_VER",
+								"bg_opa": 255
+							},
+							{
+								"part": "LV_PART_TICKS",
+								"state": "LV_STATE_DEFAULT",
+								"object": "main",
+								"disable": false,
+								"font": 12,
+								"font_family": "simsun",
+								"text_color": "#000000"
+							},
+							{
+								"part": "LV_PART_TICKS",
+								"state": "LV_STATE_FOCUSED",
+								"object": "main",
+								"disable": true,
+								"font": 12,
+								"font_family": "simsun",
+								"text_color": "#ff0000"
+							}
+						]
+					},
+					{
+						"name": "screen_label_1",
+						"type": "label",
+						"pos": [
+							67,
+							214
+						],
+						"size": [
+							100,
+							32
+						],
+						"is_move_animation": false,
+						"path_type": "linear",
+						"move_animation": {
+							"des_pos": [
+								0,
+								0
+							],
+							"duration": 100
+						},
+						"default_style": false,
+						"text": "RPM (x100)",
+						"long_mode": "LV_LABEL_LONG_WRAP",
+						"text_align": "center",
+						"style": [
+							{
+								"part": "LV_PART_MAIN",
+								"state": "LV_STATE_DEFAULT",
+								"disable": false,
+								"radius": 0,
+								"text_color": "#000000",
+								"font": 12,
+								"font_family": "arial",
+								"letter_space": 2,
+								"bg_color": "#2195f6",
+								"bg_grad_color": "#2195f6",
+								"bg_opa": 0,
+								"bg_grad_dir": "LV_GRAD_DIR_VER",
+								"paddingTop": 0,
+								"paddingRight": 0,
+								"paddingBottom": 0,
+								"paddingLeft": 0
+							},
+							{
+								"part": "LV_PART_MAIN",
+								"state": "LV_STATE_DISABLED",
+								"disable": true,
+								"radius": 0,
+								"text_color": "#000000",
+								"font": 12,
+								"font_family": "simsun",
+								"letter_space": 2,
+								"bg_color": "#2195f6",
+								"bg_grad_color": "#2195f6",
+								"bg_opa": 0,
+								"bg_grad_dir": "LV_GRAD_DIR_VER",
+								"paddingTop": 0,
+								"paddingRight": 0,
+								"paddingBottom": 0,
+								"paddingLeft": 0
+							}
+						]
+					}
+				]
+			}
+		],
+		"event": []
+	}
+}
