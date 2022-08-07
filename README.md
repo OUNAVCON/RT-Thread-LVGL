@@ -6,11 +6,13 @@ This tutorial will provide the user with the following skills.
 <li>Creating an Image in LVGL and loading it into RT-Thread</li> 
 <li>How to implement NXP FLex CAN sdk drivers in RT-Thread</li> 
 </ol>
-```
-This is still a work in progress and there is a some work left to do. This tutorial 
-was meant to create a starting point. As RT-Thread adapts new methods this tutorial
-will also need updated.
-```
+
+# Videos
+There are a few vidoes showing different aspects of this project. They are located below where they fit appropriately.
+
+They are also linked here for reference.
+
+
 
 # BOM
 ## Hardware
@@ -139,6 +141,8 @@ h. We need to enable touch support under the “Components” tab as well.
 
 i. At this point build the application and then debug. To confirm that the code builds and we can use the display.
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/27I1w731RW4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 j. If you get this error.
 ![alt](./images/tutorial-18.png)
 put "#include "touchpad.h"” near the top of “application\lvgl\lv_port_indev.c”
@@ -170,7 +174,7 @@ k. Now we need to create some gui code.
    ![alt](./images/tutorial-23.png)
    3. So I will select the one highlighted below.
    ![alt](./images/tutorial-24.png)
-   **NOTE: This is not the exact processor that we will use the one shows in the selection list is MIMXRT1062xxxxA and the board I am using is a MIMXRT1062xxxxB. For this example though, this isn’t an issue. You will need to verify that everything works for YOUR particular application.
+   **NOTE: This is not the exact processor that we will use. The one in the selection list is a MIMXRT1062xxxxA and the board I am using is a MIMXRT1062xxxxB. For this example though, this isn’t an issue. You will need to verify that everything works for YOUR particular application.
    4. I want a single page to add a couple of gauges so I will select the template below.
    ![alt](./images/tutorial-25.png)
    5. This will bring up a summary screen with a few key final selections.
@@ -206,3 +210,25 @@ b. You also need to remove the package files from the include path.
 ![alt](./images/tutorial-33.png)
 10. At this point we are able to create a LVGL project, include that code into an RT-Thread project, and use NXP based FSL driver code.
 
+In the end you should have something that works like this!
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/NIXyxk9k4Lg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+Note: If you unplug your eval board and then plug it back in and the screen does not render your image, then first determine if the lcd flashes when plugged in. The issue centers around the GT911 not initizalizing correnctly. 
+I am not sure what to do to fix this bug at this time. I have narrowed it to what I believe is the next step in debugging the issue.
+
+MCUExpresso IDE LVGL example has an initailzation sequence shown below. The GT911 comes out of reset every power cycle. Loading this code will show graphics.
+![alt](./images/MCUXpresso_GT911_I2C_With Rst_int.PNG)
+
+The start-up sequence for RT-Thread does look the same nore does the GT911 come out of reset everytime.
+This image shows the initialization sequence after MCUXpressro exmaple is loaded and the the RT-Thread code is loaded and does work, but before a power-cycle.
+![alt](./images/RT-Thread_GT911_I2C_AfterMCU_Before_Reboot.PNG)
+
+This image shows the intialization sequence after power-cycle with the RT-Thread code loaded.
+![alt](./images/RT-Thread_GT911_I2C_AfterMCU_Before_Reboot_RST_INT_2.PNG)
+
+
+
+Future work:
+1. Resolve the GT911 initialization issue.
+2. Enable PXP for hardware graphics acceleration.
