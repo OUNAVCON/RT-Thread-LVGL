@@ -218,7 +218,7 @@ Note: If you unplug your eval board and then plug it back in and the screen does
 I am not sure what to do to fix this bug at this time. I have narrowed it to what I believe is the next step in debugging the issue.
 
 MCUExpresso IDE LVGL example has an initailzation sequence shown below. The GT911 comes out of reset every power cycle. Loading this code will show graphics.
-![alt](./images/MCUXpresso_GT911_I2C_With Rst_int.PNG)
+![alt](./images/MCUXpresso_GT911_I2C_With_Rst_int.PNG)
 
 The start-up sequence for RT-Thread does look the same nore does the GT911 come out of reset everytime.
 This image shows the initialization sequence after MCUXpressro exmaple is loaded and the the RT-Thread code is loaded and does work, but before a power-cycle.
