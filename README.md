@@ -227,8 +227,18 @@ This image shows the initialization sequence after MCUXpressro exmaple is loaded
 This image shows the intialization sequence after power-cycle with the RT-Thread code loaded.
 ![alt](./images/RT-Thread_GT911_I2C_AfterMCU_Before_Reboot_RST_INT_2.PNG)
 
+<p> <b> The FIX!</b>
+The root cause is that the IOMUX and PINCONFIG has not been set prior to being used in the "applications/lvlg/lv_port_indev.c" files
+To fix this add the followling lines of code to the "static void DEMO_InitTouch(void)" files.
+``` c
+     CLOCK_EnableClock(kCLOCK_Iomuxc);
 
-
+     IOMUXC_SetPinMux(IOMUXC_GPIO_AD_B0_02_GPIO1_IO02, 0U);
+     IOMUXC_SetPinMux(IOMUXC_GPIO_AD_B0_11_GPIO1_IO11, 0U);
+     IOMUXC_SetPinConfig(IOMUXC_GPIO_AD_B0_02_GPIO1_IO02, 0x10B0U);
+     IOMUXC_SetPinConfig(IOMUXC_GPIO_AD_B0_11_GPIO1_IO11, 0x10B0U);
+```
+</p>
 Future work:
-1. Resolve the GT911 initialization issue.
+1. Create a Pull Request for a fix to the GT911 initialization issue.
 2. Enable PXP for hardware graphics acceleration.
