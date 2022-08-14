@@ -21,7 +21,6 @@ RM := rm -rf
 -include rt-thread/components/drivers/ipc/subdir.mk
 -include rt-thread/components/drivers/i2c/subdir.mk
 -include rt-thread/components/drivers/cputime/subdir.mk
--include packages/gt911-latest/src/subdir.mk
 -include packages/LVGL-v8.3.0/src/widgets/subdir.mk
 -include packages/LVGL-v8.3.0/src/misc/subdir.mk
 -include packages/LVGL-v8.3.0/src/hal/subdir.mk
@@ -121,7 +120,7 @@ all: rtthread.elf secondary-outputs
 
 # Tool invocations
 rtthread.elf: $(OBJS) $(USER_OBJS)
-	arm-none-eabi-gcc -T "D:\RT-ThreadStudio\workspace\ContestTest\board\linker_scripts\link.lds" -nostartfiles -Xlinker --gc-sections -Wl,-Map,"rtthread.map" -Xlinker --cref -mcpu=cortex-m7 -mthumb -mfpu=fpv5-d16 -mfloat-abi=hard -ffunction-sections -fdata-sections -lm -lgcc -lc -nostartfiles -Wl,--gc-sections,-Map=rtthread.map,-cref,-u,Reset_Handler   -Xlinker -print-memory-usage -o "rtthread.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-none-eabi-gcc -T "D:\repo\RT-Thread-LVGL\ContestTest\board\linker_scripts\link.lds" -nostartfiles -Xlinker --gc-sections -Wl,-Map,"rtthread.map" -Xlinker --cref -mcpu=cortex-m7 -mthumb -mfpu=fpv5-d16 -mfloat-abi=hard -ffunction-sections -fdata-sections -lm -lgcc -lc -nostartfiles -Wl,--gc-sections,-Map=rtthread.map,-cref,-u,Reset_Handler   -Xlinker -print-memory-usage -o "rtthread.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 
 rtthread.bin: rtthread.elf
 	arm-none-eabi-objcopy -O binary "rtthread.elf"  "rtthread.bin"

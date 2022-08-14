@@ -85,7 +85,6 @@ packages/LVGL-v8.3.0/src/font \
 packages/LVGL-v8.3.0/src/hal \
 packages/LVGL-v8.3.0/src/misc \
 packages/LVGL-v8.3.0/src/widgets \
-packages/gt911-latest/src \
 rt-thread/components/drivers/cputime \
 rt-thread/components/drivers/i2c \
 rt-thread/components/drivers/ipc \

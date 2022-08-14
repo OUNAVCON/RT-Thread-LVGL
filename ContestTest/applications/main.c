@@ -27,7 +27,7 @@ int main(void)
     /* set LED0 pin mode to output */
     rt_pin_mode(LED0_PIN, PIN_MODE_OUTPUT);
 
-    //start_canTask();
+    start_canTask();
 
     while (1)
     {
@@ -42,7 +42,7 @@ int main(void)
             }
         }else{
             rpm--;
-            if(rpm >= 100){
+            if(rpm == 0){
                 direction = 0;
             }
         }

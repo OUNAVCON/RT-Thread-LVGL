@@ -39,6 +39,8 @@ void task_can(void *parameter){
    flexcan_frame_t frame;
    uint32_t txIdentifier = 0x123;
    uint32_t rxIdentifier = 0x17C;
+   status_t result;
+   volatile uint32_t dlc = 0;
     /**
      * Spawn CAN Task.
      * void FLEXCAN_Init(CAN_Type *base, const flexcan_config_t *pConfig, uint32_t sourceClock_Hz);
@@ -49,6 +51,7 @@ void task_can(void *parameter){
      * CAN2_RX PIO_AD_B0_15
      */
     CLOCK_EnableClock(kCLOCK_Iomuxc);
+    CLOCK_EnableClock(kCLOCK_Can2);
     //Configure pin for CAN2
     IOMUXC_SetPinMux(IOMUXC_GPIO_AD_B0_14_FLEXCAN2_TX, 1U);
     IOMUXC_SetPinMux(IOMUXC_GPIO_AD_B0_15_FLEXCAN2_RX, 1U);
@@ -102,13 +105,19 @@ void task_can(void *parameter){
     frame.dataByte0 = 0;
     //send the data.
     //FLEXCAN_TransferSendNonBlocking(EXAMPLE_CAN, &flexcanHandle, &txXfer);
-    //FLEXCAN_TransferSendBlocking(CAN2, 0, &frame);
+    //result = FLEXCAN_TransferSendBlocking(CAN2, 0, &frame);
     FLEXCAN_WriteTxMb(CAN2, TX_MESSAGE_BUFFER_NUM, &frame);
+/*    if(result != kStatus_Success){
+        rt_thread_mdelay(1000);
+    }*/
     while(1){
     frame.dataByte0++;
     //FLEXCAN_TransferSendBlocking(CAN2, 0, &frame);
     rt_thread_mdelay(1000);
-    FLEXCAN_WriteTxMb(CAN2, TX_MESSAGE_BUFFER_NUM, &frame);
+    result = FLEXCAN_WriteTxMb(CAN2, TX_MESSAGE_BUFFER_NUM, &frame);
+    if(result != kStatus_Success){
+        rt_thread_mdelay(1000);
+    }
    /*
     * ID: 17C, C,D - RPM
     * ID: 164, E,F - Vehicle Speed
@@ -117,9 +126,17 @@ void task_can(void *parameter){
     * Also look here:
     *   https://github.com/commaai/opendbc
     */
-    FLEXCAN_ReadRxFifo(CAN2, &frame);
-    // Get the data from the message
-    // Send the data to the display either directly from here or via a message queue.
+    //result = FLEXCAN_ReadRxFifo(CAN2, &frame);
+    result = FLEXCAN_ReadRxMb(CAN2, RX_MESSAGE_BUFFER_NUM, &frame);
+    if(result == kStatus_Success){
+        dlc = frame.length;
+        // Get the data from the message
+        // Send the data to the display either directly from here or via a message queue.
+        //let's send back a response so they know we received it.
+        frame.dataByte7++;
+        FLEXCAN_WriteTxMb(CAN2, TX_MESSAGE_BUFFER_NUM, &frame);
+    }
+
     }
 
 
