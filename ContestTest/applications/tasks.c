@@ -88,8 +88,6 @@ void task_can(void *parameter)
     frame.format = (uint8_t) kFLEXCAN_FrameFormatStandard;
     frame.type = (uint8_t) kFLEXCAN_FrameTypeData;
     frame.length = (uint8_t) 8;
-    txXfer.mbIdx = (uint8_t) TX_MESSAGE_BUFFER_NUM;
-    txXfer.frame = &frame;
     frame.dataByte0 = 0;
     //send a message so we know that can is up and running.
     FLEXCAN_WriteTxMb(CAN2, TX_MESSAGE_BUFFER_NUM, &frame);
@@ -113,7 +111,6 @@ void task_can(void *parameter)
             result = FLEXCAN_ReadRxMb(CAN2, RX_CAN_RPM_MESSAGE_BUFFER_NUM, &frame);
             if (result != kStatus_Fail)
             {
-                dlc = frame.length;
                 // Get the data from the message
                 kph = (frame.dataByte0 << 8) | frame.dataByte1;
                 kph = kph / 10;
