@@ -1,6 +1,13 @@
 # RT-Thread-LVGL
 <p>The purpose of this project is to create a LCD display that takes a can message in and then shows the decocded data in a human readable format. This is accomplished by using RT-Thread RTOS with LVGL as the graphics library on an i.MX RT1060-EVK.</p>
 
+---
+***NOTE***
+Thank you to  RT-Thread, LVGL, NXP for sponsoring this event. It was great fun working on this project and I hope it is usefull. 
+
+I was glad to be able to contribute to the project under PR https://github.com/RT-Thread/rt-thread/pull/6238#issuecomment-1207624765 which fixed an issue with inititialization of the touch controller out of power up.
+
+---
 This readme should function as a tutorial to provide a user with the following skills.
 <ol>
 <li>Setup and creating a project in RT-Thread Studio</li>
@@ -12,8 +19,8 @@ This readme should function as a tutorial to provide a user with the following s
 There are a few vidoes showing different aspects of this project. They are located below where they fit appropriately. They are also linked here for reference.
 
 There is a video of the complete project on YouTube. You can see the final product taking CAN messages and updating LVGL gauges with that data.
+https://www.youtube.com/embed/a3wtcvLzRa0
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/a3wtcvLzRa0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 # BOM
 ## Hardware
@@ -132,7 +139,7 @@ d. Select the “Enable LVGL GUI Guider demo for RT-Thread” ![Red Arrow](./ima
 
 e. At this point build the application and then debug. To confirm that the code builds and we can use the display.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/27I1w731RW4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+https://www.youtube.com/embed/27I1w731RW4
 
 j. Now we need to create some gui code.
 
@@ -199,7 +206,7 @@ b. You also need to remove the package files from the include path.
 
 In the end you should have something that works like this!
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/NIXyxk9k4Lg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+https://www.youtube.com/embed/NIXyxk9k4Lg
 
 Future work:
 1. Enable PXP for hardware graphics acceleration.
