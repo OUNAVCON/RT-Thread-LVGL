@@ -5,15 +5,18 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../applications/lvgl/guiguider/generated/guider_fonts/lv_font_arial_12.c \
-../applications/lvgl/guiguider/generated/guider_fonts/lv_font_simsun_12.c 
+../applications/lvgl/guiguider/generated/guider_fonts/lv_font_simsun_12.c \
+../applications/lvgl/guiguider/generated/guider_fonts/lv_font_simsun_14.c 
 
 OBJS += \
 ./applications/lvgl/guiguider/generated/guider_fonts/lv_font_arial_12.o \
-./applications/lvgl/guiguider/generated/guider_fonts/lv_font_simsun_12.o 
+./applications/lvgl/guiguider/generated/guider_fonts/lv_font_simsun_12.o \
+./applications/lvgl/guiguider/generated/guider_fonts/lv_font_simsun_14.o 
 
 C_DEPS += \
 ./applications/lvgl/guiguider/generated/guider_fonts/lv_font_arial_12.d \
-./applications/lvgl/guiguider/generated/guider_fonts/lv_font_simsun_12.d 
+./applications/lvgl/guiguider/generated/guider_fonts/lv_font_simsun_12.d \
+./applications/lvgl/guiguider/generated/guider_fonts/lv_font_simsun_14.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

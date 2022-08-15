@@ -141,18 +141,33 @@ style_screen_main_main_default.set_bg_opa(0)
 # add style for screen
 screen.add_style(style_screen_main_main_default, lv.PART.MAIN|lv.STATE.DEFAULT)
 
+screen_canvas_1 = lv.canvas(screen)
+screen_canvas_1.set_pos(0,0)
+screen_canvas_1.set_size(480,272)
+cbuf_screen_canvas_1 = bytearray(480 * 272 * 4)
+screen_canvas_1.set_buffer(cbuf_screen_canvas_1, 480, 272, lv.img.CF.TRUE_COLOR_ALPHA)
+screen_canvas_1.fill_bg(lv.color_make(0x00,0x00,0x00), 255)
+# create style style_screen_canvas_1_main_main_default
+style_screen_canvas_1_main_main_default = lv.style_t()
+style_screen_canvas_1_main_main_default.init()
+style_screen_canvas_1_main_main_default.set_img_recolor(lv.color_make(0x00,0x00,0x00))
+style_screen_canvas_1_main_main_default.set_img_recolor_opa(255)
+
+# add style for screen_canvas_1
+screen_canvas_1.add_style(style_screen_canvas_1_main_main_default, lv.PART.MAIN|lv.STATE.DEFAULT)
+
 screen_RPM = lv.meter(screen)
-screen_RPM.set_pos(12,57)
+screen_RPM.set_pos(14,13)
 screen_RPM.set_size(200,200)
 screen_RPM_scale_1 = screen_RPM.add_scale()
-screen_RPM.set_scale_ticks(screen_RPM_scale_1, 41, 2, 10,
+screen_RPM.set_scale_ticks(screen_RPM_scale_1, 61, 2, 10,
     lv.color_make(0x00, 0x00, 0x00))
-screen_RPM.set_scale_major_ticks(screen_RPM_scale_1, 8, 5, 15,
+screen_RPM.set_scale_major_ticks(screen_RPM_scale_1, 10, 5, 15,
 	lv.color_make(0x00, 0x00, 0x00), 10)
-screen_RPM.set_scale_range(screen_RPM_scale_1, 0, 100, 270, 135)
-screen_RPM_scale_1_arc_0 = screen_RPM.add_arc(screen_RPM_scale_1, 2, lv.color_make(0xff, 0x00, 0x00), 2)
-screen_RPM.set_indicator_start_value(screen_RPM_scale_1_arc_0, 60)
-screen_RPM.set_indicator_end_value(screen_RPM_scale_1_arc_0, 100)
+screen_RPM.set_scale_range(screen_RPM_scale_1, 0, 60, 270, 135)
+screen_RPM_scale_1_arc_0 = screen_RPM.add_arc(screen_RPM_scale_1, 6, lv.color_make(0xff, 0x00, 0x00), 2)
+screen_RPM.set_indicator_start_value(screen_RPM_scale_1_arc_0, 52)
+screen_RPM.set_indicator_end_value(screen_RPM_scale_1_arc_0, 65)
 screen_RPM_scale_1_needleLine_0 = screen_RPM.add_needle_line(screen_RPM_scale_1, 2,
     lv.color_make(0x00, 0x00, 0x00),
     -20)
@@ -184,7 +199,7 @@ except AttributeError:
 screen_RPM.add_style(style_screen_rpm_main_ticks_default, lv.PART.TICKS|lv.STATE.DEFAULT)
 
 screen_label_1 = lv.label(screen)
-screen_label_1.set_pos(67,214)
+screen_label_1.set_pos(67,171)
 screen_label_1.set_size(100,32)
 screen_label_1.set_text("RPM (x100)")
 screen_label_1.set_long_mode(lv.label.LONG.WRAP)
@@ -213,6 +228,76 @@ style_screen_label_1_main_main_default.set_pad_bottom(0)
 
 # add style for screen_label_1
 screen_label_1.add_style(style_screen_label_1_main_main_default, lv.PART.MAIN|lv.STATE.DEFAULT)
+
+screen_SPEED = lv.meter(screen)
+screen_SPEED.set_pos(271,13)
+screen_SPEED.set_size(200,200)
+screen_SPEED_scale_1 = screen_SPEED.add_scale()
+screen_SPEED.set_scale_ticks(screen_SPEED_scale_1, 19, 1, 10,
+    lv.color_make(0xed, 0xf0, 0xf7))
+screen_SPEED.set_scale_major_ticks(screen_SPEED_scale_1, 1, 4, 8,
+	lv.color_make(0x00, 0x00, 0x00), 10)
+screen_SPEED.set_scale_range(screen_SPEED_scale_1, 0, 180, 300, 120)
+screen_SPEED_scale_1_needleLine_0 = screen_SPEED.add_needle_line(screen_SPEED_scale_1, 2,
+    lv.color_make(0x00, 0x00, 0x00),
+    -20)
+screen_SPEED.set_indicator_value(screen_SPEED_scale_1_needleLine_0, 30)
+# create style style_screen_speed_main_main_default
+style_screen_speed_main_main_default = lv.style_t()
+style_screen_speed_main_main_default.init()
+style_screen_speed_main_main_default.set_bg_color(lv.color_make(0xff,0xff,0xff))
+style_screen_speed_main_main_default.set_bg_grad_color(lv.color_make(0xff,0xff,0xff))
+style_screen_speed_main_main_default.set_bg_grad_dir(lv.GRAD_DIR.VER)
+style_screen_speed_main_main_default.set_bg_opa(255)
+
+# add style for screen_SPEED
+screen_SPEED.add_style(style_screen_speed_main_main_default, lv.PART.MAIN|lv.STATE.DEFAULT)
+
+# create style style_screen_speed_main_ticks_default
+style_screen_speed_main_ticks_default = lv.style_t()
+style_screen_speed_main_ticks_default.init()
+style_screen_speed_main_ticks_default.set_text_color(lv.color_make(0xff,0x00,0x00))
+try:
+    style_screen_speed_main_ticks_default.set_text_font(lv.font_simsun_12)
+except AttributeError:
+    try:
+        style_screen_speed_main_ticks_default.set_text_font(lv.font_montserrat_12)
+    except AttributeError:
+        style_screen_speed_main_ticks_default.set_text_font(lv.font_montserrat_16)
+
+# add style for screen_SPEED
+screen_SPEED.add_style(style_screen_speed_main_ticks_default, lv.PART.TICKS|lv.STATE.DEFAULT)
+
+screen_label_2 = lv.label(screen)
+screen_label_2.set_pos(346,179)
+screen_label_2.set_size(51,18)
+screen_label_2.set_text("KPH")
+screen_label_2.set_long_mode(lv.label.LONG.WRAP)
+screen_label_2.set_style_text_align(lv.TEXT_ALIGN.CENTER, 0)
+# create style style_screen_label_2_main_main_default
+style_screen_label_2_main_main_default = lv.style_t()
+style_screen_label_2_main_main_default.init()
+style_screen_label_2_main_main_default.set_radius(0)
+style_screen_label_2_main_main_default.set_bg_color(lv.color_make(0x21,0x95,0xf6))
+style_screen_label_2_main_main_default.set_bg_grad_color(lv.color_make(0x21,0x95,0xf6))
+style_screen_label_2_main_main_default.set_bg_grad_dir(lv.GRAD_DIR.VER)
+style_screen_label_2_main_main_default.set_bg_opa(0)
+style_screen_label_2_main_main_default.set_text_color(lv.color_make(0x00,0x00,0x00))
+try:
+    style_screen_label_2_main_main_default.set_text_font(lv.font_simsun_12)
+except AttributeError:
+    try:
+        style_screen_label_2_main_main_default.set_text_font(lv.font_montserrat_12)
+    except AttributeError:
+        style_screen_label_2_main_main_default.set_text_font(lv.font_montserrat_16)
+style_screen_label_2_main_main_default.set_text_letter_space(2)
+style_screen_label_2_main_main_default.set_pad_left(0)
+style_screen_label_2_main_main_default.set_pad_right(0)
+style_screen_label_2_main_main_default.set_pad_top(0)
+style_screen_label_2_main_main_default.set_pad_bottom(0)
+
+# add style for screen_label_2
+screen_label_2.add_style(style_screen_label_2_main_main_default, lv.PART.MAIN|lv.STATE.DEFAULT)
 
 
 

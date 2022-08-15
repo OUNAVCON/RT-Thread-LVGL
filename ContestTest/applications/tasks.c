@@ -28,6 +28,7 @@
 
 extern lv_ui guider_ui; //Added so we can get access to elements to update them.
 extern lv_meter_indicator_t *screen_RPM_scale_1_ndline_0;
+extern lv_meter_indicator_t *screen_SPEED_scale_1_ndline_0;
 
 void task_can(void *parameter)
 {
@@ -106,7 +107,6 @@ void task_can(void *parameter)
         rxStatusFlags = FLEXCAN_GetMbStatusFlags(CAN2, ((uint32_t) 1U << RX_CAN_RPM_MESSAGE_BUFFER_NUM));
         if (rxStatusFlags > 0)
         {
-
             FLEXCAN_ClearMbStatusFlags(CAN2, ((uint32_t) 1U << RX_CAN_RPM_MESSAGE_BUFFER_NUM));
             result = FLEXCAN_ReadRxMb(CAN2, RX_CAN_RPM_MESSAGE_BUFFER_NUM, &frame);
             if (result != kStatus_Fail)
@@ -118,29 +118,29 @@ void task_can(void *parameter)
                 rpm = rpm / 100;
                 // Send the data to the display either directly from here or via a message queue.
                 lv_meter_set_indicator_value(guider_ui.screen_RPM, screen_RPM_scale_1_ndline_0, rpm);
+                lv_meter_set_indicator_value(guider_ui.screen_SPEED, screen_SPEED_scale_1_ndline_0, kph);
                 //let's send back a response so they know we received it.
-                frame.dataByte0 = frame.dataByte7;
-                frame.dataByte1 = frame.dataByte6;
+                frame.dataByte6 = frame.dataByte0;
+                frame.dataByte7 = frame.dataByte2;
                 frame.id = FLEXCAN_ID_STD(lcdTxId); //The RX MB will receive any message, even from the TX MB. Change the ID here, to stop that.
                 FLEXCAN_WriteTxMb(CAN2, TX_MESSAGE_BUFFER_NUM, &frame);
             }
         }
     }
-
 }
 
 #define CAN_THREAD_STACK_SIZE 4096
 #define CAN_THREAD_PRIO (RT_THREAD_PRIORITY_MAX * 3 / 8)
 
-static struct rt_thread can_thread;
-static rt_uint8_t can_thread_stack[CAN_THREAD_STACK_SIZE];
+    static struct rt_thread can_thread;
+    static rt_uint8_t can_thread_stack[CAN_THREAD_STACK_SIZE];
 
-void start_canTask(void)
-{
+    void start_canTask(void)
+    {
 
-    rt_thread_init(&can_thread, "CAN", task_can,
-    RT_NULL, &can_thread_stack[0], sizeof(can_thread_stack),
-    CAN_THREAD_PRIO, 10);
-    rt_thread_startup(&can_thread);
-}
+        rt_thread_init(&can_thread, "CAN", task_can,
+        RT_NULL, &can_thread_stack[0], sizeof(can_thread_stack),
+        CAN_THREAD_PRIO, 10);
+        rt_thread_startup(&can_thread);
+    }
 //INIT_APP_EXPORT(start_canTask); //TODO: Explain that this thread begins at startup.

@@ -21,8 +21,6 @@ typedef struct
 	lv_obj_t *screen_label_1;
 	lv_obj_t *screen_SPEED;
 	lv_obj_t *screen_label_2;
-	lv_obj_t *screen_rpmValue;
-	lv_obj_t *screen_speedValue;
 }lv_ui;
 
 void setup_ui(lv_ui *ui);

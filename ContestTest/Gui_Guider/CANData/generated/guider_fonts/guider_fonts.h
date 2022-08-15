@@ -9,7 +9,6 @@
     
     LV_FONT_DECLARE(lv_font_simsun_12)
 LV_FONT_DECLARE(lv_font_arial_12)
-LV_FONT_DECLARE(lv_font_simsun_14)
 
     
     #ifdef __cplusplus
