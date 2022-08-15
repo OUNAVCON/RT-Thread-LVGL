@@ -14,8 +14,10 @@
 #include "fsl_iomuxc.h"
 #include "fsl_clock.h"
 #include "fsl_gpio.h"
+#include "gui_guider.h"
+#include "lvgl.h"
 
-#define RX_MESSAGE_BUFFER_NUM (10)
+#define RX_CAN_RPM_MESSAGE_BUFFER_NUM (10)
 #define TX_MESSAGE_BUFFER_NUM (9)
 /* Select 60M clock divided by USB1 PLL (480 MHz) as master flexcan clock source */
 #define FLEXCAN_CLOCK_SOURCE_SELECT (0U)
@@ -24,32 +26,23 @@
 /* Get frequency of flexcan clock */
 #define EXAMPLE_CAN_CLK_FREQ ((CLOCK_GetFreq(kCLOCK_Usb1PllClk) / 8) / (FLEXCAN_CLOCK_SOURCE_DIVIDER + 1U))
 
+extern lv_ui guider_ui; //Added so we can get access to elements to update them.
+extern lv_meter_indicator_t *screen_RPM_scale_1_ndline_0;
 
+void task_can(void *parameter)
+{
 
+    flexcan_handle_t flexcanHandle;
+    flexcan_config_t flexcanConfig;
+    flexcan_rx_mb_config_t mbConfig;
+    flexcan_frame_t frame;
+    uint32_t lcdTxId = 0x123;
+    uint32_t rpmCanId = 0x158;
+    status_t result;
+    uint16_t rpm;
+    uint16_t kph;
+    volatile uint64_t rxStatusFlags = 0;
 
-void task_can(void *parameter){
-
-   flexcan_handle_t flexcanHandle;
-   volatile bool txComplete = false;
-   volatile bool rxComplete = false;
-   volatile bool wakenUp    = false;
-   flexcan_mb_transfer_t txXfer, rxXfer;
-   flexcan_config_t flexcanConfig;
-   flexcan_rx_mb_config_t mbConfig;
-   flexcan_frame_t frame;
-   uint32_t txIdentifier = 0x123;
-   uint32_t rxIdentifier = 0x17C;
-   status_t result;
-   volatile uint32_t dlc = 0;
-    /**
-     * Spawn CAN Task.
-     * void FLEXCAN_Init(CAN_Type *base, const flexcan_config_t *pConfig, uint32_t sourceClock_Hz);
-     * status_t FLEXCAN_WriteTxMb(CAN_Type *base, uint8_t mbIdx, const flexcan_frame_t *pTxFrame);
-     * void FLEXCAN_TransferCreateHandle(CAN_Type *base, flexcan_hand flexcan_transfer_callback_t callback, void *userData);
-     * status_t FLEXCAN_TransferReceiveNonBlocking(CAN_Type *base, flexcan_handle_t *handle, flexcan_mb_transfer_t *pMbXfer);
-     * CAN2_TX PIO_AD_B0_14
-     * CAN2_RX PIO_AD_B0_15
-     */
     CLOCK_EnableClock(kCLOCK_Iomuxc);
     CLOCK_EnableClock(kCLOCK_Can2);
     //Configure pin for CAN2
@@ -81,67 +74,63 @@ void task_can(void *parameter){
     FLEXCAN_TransferCreateHandle(CAN2, &flexcanHandle, NULL, NULL);
 
     /* Set Rx Masking mechanism. */
-    FLEXCAN_SetRxMbGlobalMask(CAN2, FLEXCAN_RX_MB_STD_MASK(rxIdentifier, 0, 0));
+    FLEXCAN_SetRxMbGlobalMask(CAN2, FLEXCAN_RX_MB_STD_MASK(rpmCanId, 0, 0));
 
     /* Setup Rx Message Buffer. */
     mbConfig.format = kFLEXCAN_FrameFormatStandard;
-    mbConfig.type   = kFLEXCAN_FrameTypeData;
-    mbConfig.id     = FLEXCAN_ID_STD(rxIdentifier);
-    //Setup the RX Mailbox
-    FLEXCAN_SetRxMbConfig(CAN2, RX_MESSAGE_BUFFER_NUM, &mbConfig, true);
-
-    //Setup a TX Mailbox
-
-    FLEXCAN_SetTxMbConfig(CAN2, TX_MESSAGE_BUFFER_NUM, true);
+    mbConfig.type = kFLEXCAN_FrameTypeData;
+    mbConfig.id = FLEXCAN_ID_STD(rpmCanId);
+    //Setup the RPM RX Mailbox
+    FLEXCAN_SetRxMbConfig(CAN2, RX_CAN_RPM_MESSAGE_BUFFER_NUM, &mbConfig, true);
 
     //Lets create a message to transmit
-
-    frame.id     = FLEXCAN_ID_STD(txIdentifier);
-    frame.format = (uint8_t)kFLEXCAN_FrameFormatStandard;
-    frame.type   = (uint8_t)kFLEXCAN_FrameTypeData;
-    frame.length = (uint8_t)8;
-    txXfer.mbIdx = (uint8_t)TX_MESSAGE_BUFFER_NUM;
+    frame.id = FLEXCAN_ID_STD(lcdTxId);
+    frame.format = (uint8_t) kFLEXCAN_FrameFormatStandard;
+    frame.type = (uint8_t) kFLEXCAN_FrameTypeData;
+    frame.length = (uint8_t) 8;
+    txXfer.mbIdx = (uint8_t) TX_MESSAGE_BUFFER_NUM;
     txXfer.frame = &frame;
     frame.dataByte0 = 0;
-    //send the data.
-    //FLEXCAN_TransferSendNonBlocking(EXAMPLE_CAN, &flexcanHandle, &txXfer);
-    //result = FLEXCAN_TransferSendBlocking(CAN2, 0, &frame);
+    //send a message so we know that can is up and running.
     FLEXCAN_WriteTxMb(CAN2, TX_MESSAGE_BUFFER_NUM, &frame);
-/*    if(result != kStatus_Success){
-        rt_thread_mdelay(1000);
-    }*/
-    while(1){
-    frame.dataByte0++;
-    //FLEXCAN_TransferSendBlocking(CAN2, 0, &frame);
-    rt_thread_mdelay(1000);
-    result = FLEXCAN_WriteTxMb(CAN2, TX_MESSAGE_BUFFER_NUM, &frame);
-    if(result != kStatus_Success){
-        rt_thread_mdelay(1000);
-    }
-   /*
-    * ID: 17C, C,D - RPM
-    * ID: 164, E,F - Vehicle Speed
-    * ID: 309, C - Left Wheel Speed(km), D - Right Wheel Speed (km)
-    *
-    * Also look here:
-    *   https://github.com/commaai/opendbc
-    */
-    //result = FLEXCAN_ReadRxFifo(CAN2, &frame);
-    result = FLEXCAN_ReadRxMb(CAN2, RX_MESSAGE_BUFFER_NUM, &frame);
-    if(result == kStatus_Success){
-        dlc = frame.length;
-        // Get the data from the message
-        // Send the data to the display either directly from here or via a message queue.
-        //let's send back a response so they know we received it.
-        frame.dataByte7++;
-        FLEXCAN_WriteTxMb(CAN2, TX_MESSAGE_BUFFER_NUM, &frame);
-    }
 
-    }
+    while (1)
+    {
+        rt_thread_mdelay(1);
+        /*            MSB,LSB
+         * ID: 0x158, [3:2] - RPM = value * 1 + 0
+         *            [1:0] - Vehicle Speed = value * 0.1 + 0
+         *
+         * Also look here:
+         *   https://github.com/commaai/opendbc/blob/master/honda_crv_ex_2017_can_generated.dbc#L19
+         */
+        //Check for and process RPM CAN messages.
+        rxStatusFlags = FLEXCAN_GetMbStatusFlags(CAN2, ((uint32_t) 1U << RX_CAN_RPM_MESSAGE_BUFFER_NUM));
+        if (rxStatusFlags > 0)
+        {
 
+            FLEXCAN_ClearMbStatusFlags(CAN2, ((uint32_t) 1U << RX_CAN_RPM_MESSAGE_BUFFER_NUM));
+            result = FLEXCAN_ReadRxMb(CAN2, RX_CAN_RPM_MESSAGE_BUFFER_NUM, &frame);
+            if (result != kStatus_Fail)
+            {
+                dlc = frame.length;
+                // Get the data from the message
+                kph = (frame.dataByte0 << 8) | frame.dataByte1;
+                kph = kph / 10;
+                rpm = (frame.dataByte2 << 8) | frame.dataByte3;
+                rpm = rpm / 100;
+                // Send the data to the display either directly from here or via a message queue.
+                lv_meter_set_indicator_value(guider_ui.screen_RPM, screen_RPM_scale_1_ndline_0, rpm);
+                //let's send back a response so they know we received it.
+                frame.dataByte0 = frame.dataByte7;
+                frame.dataByte1 = frame.dataByte6;
+                frame.id = FLEXCAN_ID_STD(lcdTxId); //The RX MB will receive any message, even from the TX MB. Change the ID here, to stop that.
+                FLEXCAN_WriteTxMb(CAN2, TX_MESSAGE_BUFFER_NUM, &frame);
+            }
+        }
+    }
 
 }
-
 
 #define CAN_THREAD_STACK_SIZE 4096
 #define CAN_THREAD_PRIO (RT_THREAD_PRIORITY_MAX * 3 / 8)
@@ -149,16 +138,12 @@ void task_can(void *parameter){
 static struct rt_thread can_thread;
 static rt_uint8_t can_thread_stack[CAN_THREAD_STACK_SIZE];
 
-void start_canTask(void){
+void start_canTask(void)
+{
 
-    rt_thread_init(&can_thread,
-                   "CAN",
-                   task_can,
-                   RT_NULL,
-                   &can_thread_stack[0],
-                   sizeof(can_thread_stack),
-                   CAN_THREAD_PRIO,
-                   10);
+    rt_thread_init(&can_thread, "CAN", task_can,
+    RT_NULL, &can_thread_stack[0], sizeof(can_thread_stack),
+    CAN_THREAD_PRIO, 10);
     rt_thread_startup(&can_thread);
 }
 //INIT_APP_EXPORT(start_canTask); //TODO: Explain that this thread begins at startup.
