@@ -1,6 +1,7 @@
 # RT-Thread-LVGL
-LVGL implementation on RT-Thread, Using FSL CAN BUS.
-This tutorial will provide the user with the following skills.
+<p>The purpose of this project is to create a LCD display that takes a can message in and then shows the decocded data in a human readable format. This is accomplished by using RT-Thread RTOS with LVGL as the graphics library on an i.MX RT1060-EVK.</p>
+
+This readme should function as a tutorial to provide a user with the following skills.
 <ol>
 <li>Setup and creating a project in RT-Thread Studio</li>
 <li>Creating an Image in LVGL and loading it into RT-Thread</li> 
@@ -12,7 +13,7 @@ There are a few vidoes showing different aspects of this project. They are locat
 
 There is a video of the complete project on YouTube. You can see the final product taking CAN messages and updating LVGL gauges with that data.
 
-<p>INSERT VIDEO HERE</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/a3wtcvLzRa0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 # BOM
 ## Hardware
