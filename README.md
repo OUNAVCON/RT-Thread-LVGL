@@ -8,17 +8,19 @@ This tutorial will provide the user with the following skills.
 </ol>
 
 # Videos
-There are a few vidoes showing different aspects of this project. They are located below where they fit appropriately.
+There are a few vidoes showing different aspects of this project. They are located below where they fit appropriately. They are also linked here for reference.
 
-They are also linked here for reference.
+There is a video of the complete project on YouTube. You can see the final product taking CAN messages and updating LVGL gauges with that data.
 
-
+<p>INSERT VIDEO HERE</p>
 
 # BOM
 ## Hardware
 <ul> 
 <li>MIMXRT1060-EVKB</li>
 <li>Rocktech LCD</li>
+<li>USB<->CAN Adapter</li>
+<li>0.1" Pitch Header, two pieces of wire, and a DB-9 Connector for CAN</li>
 </ul>
 
 This is a view of the LVGL project running under RT-Thread.
@@ -127,27 +129,11 @@ c. Select the “Packages” tab
 d. Select the “Enable LVGL GUI Guider demo for RT-Thread” ![Red Arrow](./images/RedArrow.png)
 1. Confirm that the Version of LVGL matches the same major version selected in Gui Guider. ![Green Arrow](./images/GreenArrow.png)
 
-e. We need to enable Touch Control, if we want to be able to provide input to the LCD.The LCD I am using has a “GT911” CTP chip. So I will need to select it from the list of available touch controllers.
-
-f. Scroll Down on the “Packages” page to “Peripheral libraries and drivers” and expand the list.
-![alt](./images/tutorial-15.png)
-
-g. Now scroll to the “Touch Drivers” Option and select it.
-1. Then scroll down to the particular chip that your LCD display provides and select it.
-![alt](./images/tutorial-16.png)
-
-h. We need to enable touch support under the “Components” tab as well.
-![alt](./images/tutorial-17.png)
-
-i. At this point build the application and then debug. To confirm that the code builds and we can use the display.
+e. At this point build the application and then debug. To confirm that the code builds and we can use the display.
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/27I1w731RW4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-j. If you get this error.
-![alt](./images/tutorial-18.png)
-put "#include "touchpad.h"” near the top of “application\lvgl\lv_port_indev.c”
-
-k. Now we need to create some gui code.
+j. Now we need to create some gui code.
 
 ## Create a starter GUI Guider project
 
@@ -214,23 +200,5 @@ In the end you should have something that works like this!
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/NIXyxk9k4Lg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-Note: If you unplug your eval board and then plug it back in and the screen does not render your image, then first determine if the lcd flashes when plugged in. The issue centers around the GT911 not initizalizing correnctly. 
-I am not sure what to do to fix this bug at this time. I have narrowed it to what I believe is the next step in debugging the issue.
-
-MCUExpresso IDE LVGL example has an initailzation sequence shown below. The GT911 comes out of reset every power cycle. Loading this code will show graphics.
-![alt](./images/MCUXpresso_GT911_I2C_With_Rst_int.PNG)
-
-The start-up sequence for RT-Thread does look the same nore does the GT911 come out of reset everytime.
-This image shows the initialization sequence after MCUXpressro exmaple is loaded and the the RT-Thread code is loaded and does work, but before a power-cycle.
-![alt](./images/RT-Thread_GT911_I2C_AfterMCU_Before_Reboot.PNG)
-
-This image shows the intialization sequence after power-cycle with the RT-Thread code loaded.
-![alt](./images/RT-Thread_GT911_I2C_AfterMCU_Before_Reboot_RST_INT_2.PNG)
-
-<p> <b> The FIX!</b>
-The root cause is that the IOMUX and PINCONFIG has not been set prior to being used in the "applications/lvlg/lv_port_indev.c" files
-See PR for fix to correct this issue. https://github.com/RT-Thread/rt-thread/pull/6238
-</p>
 Future work:
-1. Create a Pull Request for a fix to the GT911 initialization issue.
-2. Enable PXP for hardware graphics acceleration.
+1. Enable PXP for hardware graphics acceleration.
